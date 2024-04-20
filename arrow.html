@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pattern Question</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-container {
+      margin-bottom: 20px;
+    }
+
+    .pattern {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .arrow {
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .option {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .option:hover {
+      background-color: #2980b9;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 10px;
+      }
+
+      .option {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="question-container">
+      <p>Please tell me where the arrow should go next to respect the pattern I am showing you:</p>
+      <div class="pattern">
+        <center>
+          <div class="arrow">🡆</div><br>
+          <div class="arrow">🡆🡆</div><br>
+          <div class="arrow">🡆🡆🡆</div><br>
+          <div class="arrow">🡆🡆🡆🡆</div><br>
+          <div class="arrow">🡆🡆🡆🡆🡆</div><br>
+          <div class="arrow">?</div>
+        </center>
+      </div>
+    </div>
+    <div id="options-container">
+      <button id="option1" class="option">🡆🡆🡆🡆🡆🡆</button>
+      <button id="option2" class="option">🡆🡆🡆🡆🡆</button>
+      <button id="option3" class="option">🡆🡆🡆🡆</button>
+      <button id="option4" class="option">🡆🡆🡆</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const options = document.querySelectorAll(".option");
+      let score = 0;
+
+      // Get score from URL
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const previousScore = parseInt(urlParams.get('score')) || 0;
+      score += previousScore;
+
+      // Add click event listeners to each option
+      options.forEach(option => {
+        option.addEventListener("click", function() {
+          const selectedOptionId = this.id;
+          if (selectedOptionId === "option1") {
+            score++; // Increment score if correct
+          }
+          // Redirect to clock.html with updated score
+          window.location.href = `clock.html?score=${score}`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

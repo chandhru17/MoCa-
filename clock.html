@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clock Hands Placement Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      margin-top: 50px;
+      color: #333;
+    }
+
+    .clock {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border: 6px solid #333; /* Increased border size for better visibility */
+      border-radius: 50%;
+      margin: 50px auto;
+      background-color: #fff; /* Added background color */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Added shadow effect */
+    }
+
+    .hand {
+      position: absolute;
+      background-color: black;
+      transform-origin: bottom center;
+      left: calc(50% - 3px); /* Adjusted for horizontal centering */
+    }
+
+    .hour-hand {
+      width: 6px;
+      height: 60px;
+      top: calc(50% - 60px); /* Adjusted for vertical centering */
+    }
+
+    .minute-hand {
+      width: 6px; /* Decreased width for better visual balance */
+      height: 90px;
+      top: calc(50% - 90px); /* Adjusted for vertical centering */
+    }
+
+    .center-dot {
+      position: absolute;
+      width: 12px; /* Increased width for better visibility */
+      height: 12px; /* Increased height for better visibility */
+      background-color: black;
+      border-radius: 50%;
+      top: calc(50% - 6px); /* Adjusted for vertical centering */
+      left: calc(50% - 6px); /* Adjusted for horizontal centering */
+    }
+
+    #submitBtn {
+      display: block;
+      margin: 20px auto;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #submitBtn:hover {
+      background-color: #2980b9;
+    }
+
+    #submitBtn:focus {
+      outline: none;
+    }
+
+  </style>
+</head>
+<body>
+  <h2>Set the clock to time 6:30</h2>
+  <div class="clock">
+    <div class="numbers"></div>
+    <div id="hourHand" class="hand hour-hand"></div>
+    <div id="minuteHand" class="hand minute-hand"></div>
+    <div class="center-dot"></div>
+  </div>
+  <button id="submitBtn">Submit</button>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const hourHand = document.getElementById("hourHand");
+      const minuteHand = document.getElementById("minuteHand");
+      const submitBtn = document.getElementById("submitBtn");
+      const clock = document.querySelector(".clock");
+
+      let isDraggingHour = false;
+      let isDraggingMinute = false;
+
+      function updateClockHands(event) {
+        if (isDraggingHour) {
+          updateHandPosition(event, hourHand, "hour");
+        } else if (isDraggingMinute) {
+          updateHandPosition(event, minuteHand, "minute");
+        }
+      }
+
+      function updateHandPosition(event, hand, type) {
+        const rect = clock.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+        const degrees = angle * (180 / Math.PI) + 90;
+
+        hand.style.transform = `rotate(${degrees}deg)`;
+      }
+
+      hourHand.addEventListener("mousedown", function() {
+        isDraggingHour = true;
+      });
+
+      minuteHand.addEventListener("mousedown", function() {
+        isDraggingMinute = true;
+      });
+
+      document.addEventListener("mousemove", updateClockHands);
+      document.addEventListener("mouseup", function() {
+        isDraggingHour = false;
+        isDraggingMinute = false;
+      });
+
+      submitBtn.addEventListener("click", function() {
+        const hourRotation = parseFloat(hourHand.style.transform.split("(")[1].split("deg)")[0]);
+        const minuteRotation = parseFloat(minuteHand.style.transform.split("(")[1].split("deg)")[0]);
+
+        const hour = ((hourRotation % 360) / 30) % 12;
+        const minute = ((minuteRotation % 360) / 6) % 60;
+
+        let score = 0;
+        // Get score from URL
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const previousScore = parseInt(urlParams.get('score')) || 0;
+
+        if (hour === 6 && minute === 30) {
+          score = previousScore + 1;
+        } else {
+          score = previousScore + 0;
+        }
+
+        // Redirect to repeat.html with updated score
+        window.location.href = `repeat.html?score=${score}`;
+      });
+
+      // Initialize clock hands to 6:30
+      hourHand.style.transform = "rotate(180deg)";
+      minuteHand.style.transform = "rotate(180deg)";
+    });
+  </script>
+</body>
+</html>

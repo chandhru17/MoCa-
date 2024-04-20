@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draw Line from Number to Letter</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+#canvas {
+  margin-top: 50px;
+  border: 2px solid #333; /* Border for the canvas */
+  background-color: #fff; /* Background color for the canvas */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+#submitBtn {
+  display: block;
+  margin: 20px auto;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#submitBtn:hover {
+  background-color: #2980b9;
+}
+
+#submitBtn:focus {
+  outline: none;
+}
+  
+.container {
+  text-align: center;
+}
+
+canvas {
+  border: 1px solid #000;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Please draw a line going from a number to a letter in ascending order</h1>
+    <p>Begin here [point to (1)] and draw a line from 1 then to A then to 2 and so on. End here [point to (E)].</p>
+    <canvas id="canvas" width="500" height="400"></canvas>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const numbers = ["4", "1", "2", "3", "5"];
+  const letters = ["B", "D", "C", "E", "A"];
+
+  const numberPositions = [{ x: 50, y: 100 }, { x: 150, y: 100 }, { x: 250, y: 100 }, { x: 350, y: 100 }, { x: 450, y: 100 }];
+  const letterPositions = [{ x: 50, y: 300 }, { x: 150, y: 300 }, { x: 250, y: 300 }, { x: 350, y: 300 }, { x: 450, y: 300 }];
+
+  let path = [];
+
+  canvas.addEventListener("click", handleClick);
+
+  drawNumbersAndLetters();
+
+  function drawNumbersAndLetters() {
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "black";
+
+    numbers.forEach((number, index) => {
+      ctx.fillText(number, numberPositions[index].x, numberPositions[index].y);
+    });
+
+    letters.forEach((letter, index) => {
+      ctx.fillText(letter, letterPositions[index].x, letterPositions[index].y);
+    });
+  }
+
+  function handleClick(e) {
+    const { offsetX, offsetY } = e;
+    const clickedElement = getClickedElement(offsetX, offsetY);
+
+    if (clickedElement !== null) {
+      path.push(clickedElement);
+      redraw();
+      validatePath();
+    }
+  }
+
+  function getClickedElement(x, y) {
+    for (let i = 0; i < numberPositions.length; i++) {
+      const numberX = numberPositions[i].x;
+      const numberY = numberPositions[i].y;
+      if (x >= numberX - 10 && x <= numberX + 10 && y >= numberY - 10 && y <= numberY + 10) {
+        return numbers[i];
+      }
+    }
+
+    for (let i = 0; i < letterPositions.length; i++) {
+      const letterX = letterPositions[i].x;
+      const letterY = letterPositions[i].y;
+      if (x >= letterX - 10 && x <= letterX + 10 && y >= letterY - 10 && y <= letterY + 10) {
+        return letters[i];
+      }
+    }
+
+    return null;
+  }
+
+  function redraw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawNumbersAndLetters();
+
+    if (path.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(numberPositions[numbers.indexOf(path[0])].x, numberPositions[numbers.indexOf(path[0])].y);
+      for (let i = 1; i < path.length; i++) {
+        if (numbers.includes(path[i])) {
+          ctx.lineTo(numberPositions[numbers.indexOf(path[i])].x, numberPositions[numbers.indexOf(path[i])].y);
+        } else {
+          ctx.lineTo(letterPositions[letters.indexOf(path[i])].x, letterPositions[letters.indexOf(path[i])].y);
+        }
+      }
+      ctx.stroke();
+    }
+  }
+
+  function validatePath() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const previousScore = parseInt(urlParams.get('score')) || 0;
+    if (path.length === 1 && path[0] !== "1") {
+      const updatedScore = previousScore + 0;
+
+        // Redirect to connect.html with updated score
+        window.location.href = `finalscore.html?score=${updatedScore}`;
+      path = [];
+      redraw();
+      return;
+    }
+
+    if (path.length === 11 && path[path.length - 1] !== "E") {
+      const updatedScore = previousScore + 0;
+
+        // Redirect to connect.html with updated score
+        window.location.href = `finalscore.html?score=${updatedScore}`;
+      path = [];
+      redraw();
+      return;
+    }
+
+    if (path.length > 11) {
+      const updatedScore = previousScore + 0;
+
+        // Redirect to connect.html with updated score
+        window.location.href = `finalscore.html?score=${updatedScore}`;
+      path = [];
+      redraw();
+      return;
+    }
+
+    // Validation logic for ascending order
+    for (let i = 0; i < path.length - 1; i++) {
+      if ((numbers.includes(path[i]) && numbers.includes(path[i + 1]) && parseInt(path[i + 1]) !== parseInt(path[i]) + 1) ||
+          (letters.includes(path[i]) && letters.includes(path[i + 1]) && letters.indexOf(path[i + 1]) !== letters.indexOf(path[i]) + 1)) {
+            const updatedScore = previousScore + 1;
+
+// Redirect to connect.html with updated score
+            window.location.href = `finalscore.html?score=${updatedScore}`; 
+        path = [];
+        redraw();
+        return;
+      }
+    }
+
+    // If the path is valid, congratulate the user
+    if (path.length === 10 && path[path.length - 1] === "E") {
+        
+        const updatedScore = previousScore + 1;
+
+        // Redirect to connect.html with updated score
+        window.location.href = `finalscore.html?score=${updatedScore}`;
+        
+    }
+  }
+});
+  </script>
+</body>
+</html>

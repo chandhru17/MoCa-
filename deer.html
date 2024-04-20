@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Quiz</title>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .quiz-container {
+    max-width: 700px;
+    margin: 50px auto;
+    text-align: center;
+    background-color: #fff; /* Background color for the quiz container */
+    border: 2px solid #333; /* Border for the quiz container */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Add padding for better spacing */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  .options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .option {
+    width: 200px;
+    height: 150px;
+    cursor: pointer;
+    border-radius: 10px; /* Rounded corners for the image */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+  }
+  
+  .option:hover {
+    transform: scale(1.1); /* Scale up the image on hover */
+  }
+  
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Choose the image with a deer:</h2>
+    <div class="options">
+      <img src="girafee.jpg" alt="Option 1" class="option" data-answer="false">
+      <img src="goat.jpg" alt="Option 2" class="option" data-answer="false">
+      <img src="zebra.jpg" alt="Option 3" class="option" data-answer="false">
+      <img src="deer.jpg" alt="Option 4" class="option" data-answer="true">
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const options = document.querySelectorAll(".option");
+  
+    options.forEach(option => {
+      option.addEventListener("click", function() {
+        const isCorrect = this.getAttribute("data-answer") === "true";
+        const score = isCorrect ? 1 : 0;
+        window.location.href = `arrow.html?score=${score}`;
+      });
+    });
+  });
+  
+  </script>
+</body>
+</html>

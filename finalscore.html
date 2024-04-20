@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Score</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    #final-score {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    #play-again-btn {
+      display: block;
+      margin: 20px auto;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #play-again-btn:hover {
+      background-color: #2980b9;
+    }
+
+    #play-again-btn:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Congratulations!</h1>
+    <h2>Your final score is:</h2>
+    <p id="final-score"></p>
+    <button id="play-again-btn">Play Again</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const finalScoreDisplay = document.getElementById("final-score");
+      const playAgainBtn = document.getElementById("play-again-btn");
+
+      // Get score from URL
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const score = parseInt(urlParams.get('score')) || 0;
+
+      finalScoreDisplay.textContent = score + "/9";
+
+      playAgainBtn.addEventListener("click", function() {
+        window.location.href = "index.html"; // Redirect to quiz.html to play again
+      });
+    });
+  </script>
+</body>
+</html>

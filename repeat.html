@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentence Challenge</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #sentence, #timer, #input-container {
+      margin: 50px auto;
+      max-width: 600px;
+    }
+    
+    #sentence {
+      font-size: 24px;
+      color: #333;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    #timer {
+      font-size: 18px;
+      color: #555;
+    }
+    
+    input[type="text"] {
+      width: 300px;
+      height: 40px;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+    
+    button {
+      height: 40px;
+      font-size: 16px;
+      padding: 0 20px;
+      margin-left: 10px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+    }
+    
+    button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="sentence" class="hidden">This is the sentence you have to type</div>
+  <div id="timer" class="hidden">Time remaining: <span id="countdown">20</span> seconds</div>
+  <div id="input-container" class="hidden">
+    <input type="text" id="userInput" placeholder="Enter the sentence">
+    <button id="submitBtn">Submit</button>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const sentenceDiv = document.getElementById("sentence");
+      const timerDiv = document.getElementById("timer");
+      const countdownSpan = document.getElementById("countdown");
+      const inputContainer = document.getElementById("input-container");
+      const userInput = document.getElementById("userInput");
+      const submitBtn = document.getElementById("submitBtn");
+
+      let countdown = 20;
+      let countdownInterval;
+
+      // Show sentence and timer for 20 seconds
+      sentenceDiv.classList.remove("hidden");
+      timerDiv.classList.remove("hidden");
+      countdownSpan.textContent = countdown;
+      countdownInterval = setInterval(updateCountdown, 1000);
+
+      // Update countdown timer
+      function updateCountdown() {
+        countdown--;
+        countdownSpan.textContent = countdown;
+        if (countdown === 0) {
+          clearInterval(countdownInterval);
+          sentenceDiv.classList.add("hidden");
+          timerDiv.classList.add("hidden");
+          inputContainer.classList.remove("hidden");
+          userInput.focus();
+        }
+      }
+
+      // Handle form submission
+      submitBtn.addEventListener("click", function() {
+        const userSentence = userInput.value.trim();
+        const correctSentence = "This is the sentence you have to type";
+        if (userSentence === correctSentence) {
+          // Get score from URL
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const previousScore = parseInt(urlParams.get('score')) || 0;
+          const score = previousScore + 1;
+          // Redirect to 3animals.html with updated score
+          window.location.href = `3animals.html?score=${score}`;
+        } else {
+          // Get score from URL
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const previousScore = parseInt(urlParams.get('score')) || 0;
+          const score = previousScore + 0;
+          // Redirect to 3animals.html with updated score
+          window.location.href = `3animals.html?score=${score}`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

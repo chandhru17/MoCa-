@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOCA Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+    
+    #question-container {
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    #options-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .option {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    
+    .option:hover {
+      background-color: #0056b3;
+    }
+    
+    #submitBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    
+    #submitBtn:hover {
+      background-color: #0056b3;
+    }
+    
+    #user-input {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    
+    #score {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="question-container"></div>
+    <div id="options-container"></div>
+    <input type="text" id="user-input" style="display: none;">
+    <button id="submitBtn">Next</button>
+    <p id="score"></p>
+  </div>
+
+  <script>
+    const questions = [    
+      {
+        question: "What is the year, season, date, day, month, and year? (YYYY, Season, MM/DD/YYYY, Day, Month, YYYY)",
+        answer: "User input"
+      },
+    ];
+    
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    const questionContainer = document.getElementById("question-container");
+    const optionsContainer = document.getElementById("options-container");
+    const submitBtn = document.getElementById("submitBtn");
+    const userInput = document.getElementById("user-input");
+    const scoreDisplay = document.getElementById("score");
+    
+    submitBtn.addEventListener("click", () => {
+      checkAnswer();
+    });
+    
+    function checkAnswer() {
+      const currentQuestion = questions[currentQuestionIndex];
+      
+      if (currentQuestion.answer === "User input") {
+        const userAnswer = userInput.value.trim();
+        score = userAnswer === "User input" ? 1 : 0;
+      } else {
+        const selectedOption = document.querySelector('input[name="option"]:checked');
+        if (selectedOption) {
+          if (selectedOption.value === currentQuestion.answer) {
+            score = 1;
+          } else {
+            score = 0;
+          }
+        } else {
+          score = 0;
+        }
+      }
+      
+      showResult();
+    }
+    
+    function showResult() {
+      scoreDisplay.textContent = `Score: ${score} / ${questions.length}`;
+
+      // Get score from URL
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const previousScore = parseInt(urlParams.get('score')) || 0;
+      const updatedScore = previousScore + score;
+
+      // Redirect to connect.html with updated score
+      window.location.href = `connect.html?score=${updatedScore}`;
+    }
+      
+    // Display the current question
+    function displayQuestion() {
+      const currentQuestion = questions[currentQuestionIndex];
+      questionContainer.textContent = currentQuestion.question;
+      
+      if (currentQuestion.options) {
+        optionsContainer.innerHTML = "";
+        currentQuestion.options.forEach(option => {
+          const optionInput = document.createElement("input");
+          optionInput.setAttribute("type", "radio");
+          optionInput.setAttribute("name", "option");
+          optionInput.setAttribute("value", option);
+          optionInput.classList.add("option");
+          
+          const optionLabel = document.createElement("label");
+          optionLabel.textContent = option;
+          optionLabel.classList.add("option");
+          
+          const optionDiv = document.createElement("div");
+          optionDiv.appendChild(optionInput);
+          optionDiv.appendChild(optionLabel);
+          
+          optionsContainer.appendChild(optionDiv);
+        });
+      } else {
+        userInput.style.display = "block";
+        userInput.focus();
+        userInput.value = ""; // Clear previous input
+      }
+    }
+    
+    // Load the first question
+    displayQuestion();
+  </script>
+</body>
+</html>

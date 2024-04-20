@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoCA Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    #startBtn:hover {
+      background-color: #0056b3;
+    }
+
+    #startBtn:focus {
+      outline: none;
+    }
+
+    #startBtn:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Montreal Cognitive Assessment (MoCA) Test</h1>
+    <p>The Montreal Cognitive Assessment (MoCA) is a widely used screening test for detecting cognitive impairment. It evaluates various cognitive domains, including memory, attention, language, and orientation.</p>
+    <p>The test consists of a series of questions and tasks that assess different cognitive functions.</p>
+    <button id="startBtn">Start Test</button>
+  </div>
+
+  <script>
+    document.getElementById("startBtn").addEventListener("click", function() {
+      window.location.href = "deer.html";
+    });
+  </script>
+</body>
+</html>
